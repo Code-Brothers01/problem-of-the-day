@@ -1,0 +1,28 @@
+class NumberContainers {
+private:
+    unordered_map<int,set<int>> numberToIndices;
+    unordered_map<int,int> indexToNumbers;
+public:
+    NumberContainers() {
+        
+    }
+    
+    void change(int index, int number) {
+        if(indexToNumbers.find(index) != indexToNumbers.end()){
+            int prevNumber = indexToNumbers[index];
+            numberToIndices[prevNumber].erase(index);
+            if(numberToIndices[prevNumber].empty()){
+                numberToIndices.erase(prevNumber);
+            }
+        }
+        indexToNumbers[index] = number;
+        numberToIndices[number].insert(index);
+    }
+    
+    int find(int number) {
+        if(numberToIndices.find(number) != numberToIndices.end()){
+            return* numberToIndices[number].begin();
+        }
+        return -1;
+    }
+};
