@@ -1,0 +1,14 @@
+class Solution {
+public:
+    long long countBadPairs(vector<int>& nums) {
+        long long badPairs = 0;
+        unordered_map<int,int>goodPairMap;
+        for(int j = 0;j < nums.size();j++){
+            int difference = j - nums[j];//Find difference
+            int numberOfGoodPairs = goodPairMap[difference];//Number of previous pair in map
+            badPairs += j - numberOfGoodPairs;//subtract the good pairs from total pairs
+            goodPairMap[difference] = numberOfGoodPairs + 1;//update the value of goodpairs
+        }
+        return badPairs;
+    }
+};
