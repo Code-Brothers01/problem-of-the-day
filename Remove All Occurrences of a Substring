@@ -1,0 +1,17 @@
+class Solution {
+public:
+    string removeOccurrences(string s, string part) {
+        string result = "";  // Acts as a stack to build the final result
+
+        for (char c : s) {  // Traverse each character in the string
+            result.push_back(c);  // Append character to result
+            
+            // Check if the last 'part.length()' characters form `part`
+            if (result.size() >= part.size() && result.substr(result.size() - part.size()) == part) {
+                result.erase(result.end() - part.size(), result.end());  // Remove `part` from result
+            }
+        }
+
+        return result;  // Return the final modified string
+    }
+};
