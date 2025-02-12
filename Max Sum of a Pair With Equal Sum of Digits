@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int calculateDigitSum(int number){
+        int sum = 0;
+        while(number > 0){
+            sum += number % 10;
+            number /= 10;
+        }
+        return sum;
+    }
+    int maximumSum(vector<int>& nums) {
+        //#1 approach
+        // vector<pair<int , int>>digitSumPairs;
+        // for(int i = 0;i < nums.size();i++){
+        //     int digitSum = calculateDigitSum(nums[i]);
+        //     digitSumPairs.push_back({digitSum,nums[i]});
+        // }
+        // sort(digitSumPairs.begin(),digitSumPairs.end());
+        // int maxSum = -1;
+        // for(int i = 1;i < digitSumPairs.size();i++){
+        //     int currentSum = digitSumPairs[i].first;
+        //     int previousSum = digitSumPairs[i-1].first;
+        //     if(currentSum == previousSum){
+        //         int sum = digitSumPairs[i].second + digitSumPairs[i-1].second;
+        //         maxSum = max(maxSum,sum);
+        //     }
+        // }
+        // return maxSum;
+        //#2 approach
+        int result = -1;
+        
+        int digitMapping[82] = {};
+
+        for (int element : nums) {
+            int digitSum = 0;
+
+            
+            digitSum = calculateDigitSum(element);
+
+           
+            if (digitMapping[digitSum] > 0) {
+                
+                result = max(result, digitMapping[digitSum] + element);
+            }
+
+           
+            digitMapping[digitSum] = max(digitMapping[digitSum], element);
+        }
+
+        return result;
+    }
+};
