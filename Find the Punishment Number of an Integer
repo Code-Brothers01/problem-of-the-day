@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool partitions(int startIndex,int sum,string squareString,int target,vector<vector<int>>&dp){
+        if(startIndex == squareString.size()){
+            return sum == target;
+        }
+        if(sum > target){
+            return false;
+        }
+        if (dp[startIndex][sum] != -1) return dp[startIndex][sum];
+
+        bool partitionFound = false;
+        for(int i = startIndex;i < squareString.size();i++){
+            string currentString = squareString.substr(startIndex,i - startIndex + 1);// 8
+            int addString = stoi(currentString);
+            partitionFound = partitionFound || partitions(i + 1, sum + addString , squareString,target,dp);
+            if(partitionFound == true) return true;
+        }
+        return dp[startIndex][sum] = partitionFound;
+    }
+    int punishmentNumber(int n) {
+        int punishmentNum = 0;
+
+        for(int i = 1; i <= n;i++){
+            int squareNum = i * i;
+            string stringNum = to_string(squareNum);
+            vector<vector<int>>dp(stringNum.size(),vector<int>(i + 1, -1));
+            if(partitions(0,0,stringNum,i,dp)){
+                punishmentNum += squareNum;
+            }
+        }
+        return punishmentNum;
+    }
+};
