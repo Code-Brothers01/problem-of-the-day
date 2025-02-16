@@ -1,0 +1,63 @@
+class Solution {
+public:
+    // Backtracking function to construct the sequence
+    bool backtrack(int index, vector<int>& ans, vector<bool>& used, int n) {
+        // Base case: If we reach the end of the array, return true (valid sequence found)
+        if (index == ans.size()) {
+            return true;
+        }
+
+        // If the current index is already filled, move to the next index
+        if (ans[index] != 0) {
+            return backtrack(index + 1, ans, used, n);
+        }
+
+        // Try placing numbers from n down to 1 (to get the largest lexicographical order)
+        for (int num = n; num >= 1; num--) {
+            // If the number is already used, skip it
+            if (used[num]) {
+                continue;
+            }
+
+            int secondIndex;
+            // If num == 1, it only appears once (so place it at the same index)
+            if (num == 1) {
+                secondIndex = index;
+            } 
+            // Otherwise, place `num` at both `index` and `index + num`
+            else {
+                secondIndex = index + num;
+            }
+
+            // Check if we can place `num` at `index` and `secondIndex` without conflict
+            if (secondIndex < ans.size() && ans[secondIndex] == 0) {
+                // Place `num` at both positions
+                ans[index] = num;
+                ans[secondIndex] = num;
+                used[num] = true;
+
+                // Recursively try to fill the remaining array
+                if (backtrack(index + 1, ans, used, n)) {
+                    return true; // If a valid sequence is found, return true
+                }
+
+                // **Backtrack**: Reset the changes if the placement didn't lead to a solution
+                ans[index] = 0;
+                ans[secondIndex] = 0;
+                used[num] = false;
+            }
+        }
+        return false; // No valid sequence found at this index
+    }
+
+    vector<int> constructDistancedSequence(int n) {
+        int size = 2 * n - 1; // The length of the sequence
+        vector<int> ans(size, 0); // Initialize the sequence with zeros
+        vector<bool> used(n + 1, false); // To track whether a number is used
+
+        // Start the backtracking from index 0
+        backtrack(0, ans, used, n);
+        
+        return ans; // Return the final sequence
+    }
+};
