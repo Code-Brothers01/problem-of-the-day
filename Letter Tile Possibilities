@@ -1,0 +1,41 @@
+class Solution {
+public:
+//RECURSION
+    // int numTilePossibilities(string tiles) {
+    //     unordered_set<string>sequences;
+    //     vector<bool>arr(tiles.length(),false);
+    //     generateSeq(tiles,"",arr,sequences);
+    //     return sequences.size()-1; 
+    // }
+    // void generateSeq(string& tiles, string current, vector<bool>& arr,unordered_set<string>& sequences){
+    //     sequences.insert(current);
+    //     for(int i = 0;i < tiles.length();i++){
+    //         if(!arr[i]){
+    //             arr[i] = true;
+    //             generateSeq(tiles,current + tiles[i], arr,sequences);
+    //             arr[i] = false;
+    //         }
+    //     }
+    // }
+//OPTIMAL RECURSION
+    int numTilePossibilities(string tiles) {
+        int charCount[26] = {0};
+        for(int i = 0;i < tiles.length();i++){
+            charCount[tiles[i]-'A']++;
+        }
+        return findSeq(charCount);
+    }
+    int findSeq(int charCount[26]){
+        int total = 0;
+        for(int i = 0;i < 26;i++){
+            if(charCount[i] == 0){
+                continue;
+            }
+            total++;
+            charCount[i]--;
+            total += findSeq(charCount);
+            charCount[i]++;
+        }
+        return total;
+    }
+};
