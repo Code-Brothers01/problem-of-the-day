@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string getHappyString(int n, int k) {
+        string ans = "";
+        vector<string>allStrings;
+        generateHappyStrings(n,ans,allStrings);
+        if(allStrings.size() < k) return "";
+        sort(allStrings.begin(),allStrings.end());
+        return allStrings[k-1];
+    }
+    void generateHappyStrings(int n,string ans,vector<string>&allStrings){
+        if(ans.size() == n){
+            allStrings.push_back(ans);
+            return;
+        }
+        for(char currChar = 'a';currChar <= 'c';currChar++){
+            if(ans.size() > 0 && ans.back() == currChar){
+                continue;
+            }
+            generateHappyStrings(n,ans + currChar , allStrings);
+        }
+
+    }
+};
