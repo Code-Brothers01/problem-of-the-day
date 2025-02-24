@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int mostProfitablePath(vector<vector<int>>& edges, int bob, vector<int>& amount) {
+        int n = amount.size();
+        vector<vector<int>> graph(n); // Adjacency list representation of the tree
+        
+        // Step 1: Build the tree graph from edges
+        for (auto& edge : edges) {
+            graph[edge[0]].push_back(edge[1]);
+            graph[edge[1]].push_back(edge[0]);
+        }
+
+        vector<int> bobPath(n, -1); // Stores the time when Bob reaches each node (-1 if he never reaches)
+        vector<int> path; // Stores Bob's path from his starting node to node 0
+
+        // Step 2: Find Bob's path to node 0 and record timestamps
+        function<bool(int, int)> fillBobPath = [&](int node, int parent) {
+            if (node == 0) return true; // If we reach node 0, we return true
+            
+            for (int neighbor : graph[node]) {
+                if (neighbor != parent) { // Avoid revisiting the parent node
+                    path.push_back(node); // Add current node to Bob's path
+                    if (fillBobPath(neighbor, node)) return true; // Continue DFS
+                    path.pop_back(); // Backtrack if this path doesn't lead to 0
+                }
+            }
+            return false;
+        };
+
+        fillBobPath(bob, -1); // Start DFS from Bob's starting position
+
+        // Store the timestamp when Bob reaches each node
+        for (int i = 0; i < path.size(); i++) {
+            bobPath[path[i]] = i; // Bob reaches node `path[i]` at time `i`
+        }
+
+        // Step 3: DFS to find Alice's most profitable path
+        function<int(int, int, int, int)> getAliceMaxScore = [&](int node, int parent, int currScore, int timestamp) {
+            // Determine how much Alice can collect from this node
+            if (bobPath[node] == -1 || bobPath[node] > timestamp) {
+                // Bob hasn't reached this node yet → Alice takes full amount
+                currScore += amount[node];
+            } else if (bobPath[node] == timestamp) {
+                // Alice and Bob reach at the same time → Alice takes half the amount
+                currScore += amount[node] / 2;
+            }
+
+            // If the node is a leaf (except for node 0), return the current score
+            if (graph[node].size() == 1 && node != 0) return currScore;
+
+            int maxScore = INT_MIN; // Track the max score among all paths
+
+            // Explore all child nodes (DFS traversal)
+            for (int neighbor : graph[node]) {
+                if (neighbor != parent) { // Avoid revisiting the parent node
+                    maxScore = max(maxScore, getAliceMaxScore(neighbor, node, currScore, timestamp + 1));
+                }
+            }
+            return maxScore;
+        };
+
+        // Start DFS from node 0 (Alice's starting position)
+        return getAliceMaxScore(0, -1, 0, 0);
+    }
+};
