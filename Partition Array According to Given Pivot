@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> pivotArray(vector<int>& nums, int pivot) {
+        int less = 0;int greater = nums.size() - 1;
+        vector<int>ans(nums.size());
+        for(int i = 0,j = nums.size() - 1;i < nums.size();i++ , j--){
+            if(nums[i] < pivot){
+                ans[less] = nums[i];
+                less++;
+            }
+            if(nums[j]> pivot){
+                ans[greater] = nums[j];
+                greater--;
+            }
+        }
+        while(less <= greater){
+            ans[less] = pivot;
+            less++;
+        }
+        return ans;
+    }
+};
