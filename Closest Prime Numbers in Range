@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int>sieve(int right){
+        vector<int>sieve(right + 1,1);
+        sieve[0] = 0;
+        sieve[1] = 0;
+        for(int i = 2;i*i <= right;i++){
+            if(sieve[i] == 1){
+                for(int multiple = i*i;multiple <= right;multiple += i){
+                    sieve[multiple] = 0;
+                }
+            }
+        }
+        return sieve;
+    }
+    vector<int> closestPrimes(int left, int right) {
+        vector<int>sieveArray = sieve(right);
+        vector<int>primeNumbers;
+        for(int i = left;i <= right;i++){
+            if(sieveArray[i] == 1){
+                primeNumbers.push_back(i);
+            }
+        }
+        if(primeNumbers.size() < 2){
+            return vector<int>{-1,-1};
+        }
+        int minDiff = INT_MAX;
+        vector<int> pair(2,-1);
+        for(int i = 1;i < primeNumbers.size();i++){
+            int diff = primeNumbers[i] - primeNumbers[i-1];
+            if(diff < minDiff){
+                minDiff = diff;
+                pair[0] = primeNumbers[i - 1];
+                pair[1] = primeNumbers[i];
+            }
+        }
+        return pair;
+    }
+};
