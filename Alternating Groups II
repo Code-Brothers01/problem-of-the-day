@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int numberOfAlternatingGroups(vector<int>& colors, int k) {
+        int length = colors.size();
+        int result = 0;
+        int CountOfAE = 1; 
+        int lastColor = colors[0];
+        for(int i = 1;i < length;i++){
+            if(colors[i] == lastColor){
+                CountOfAE = 1;
+                lastColor = colors[i];
+                continue;
+            }
+            CountOfAE++;
+            if(CountOfAE >= k){
+                result++;
+            }
+            lastColor = colors[i];
+        }
+        for(int i = 0;i < k-1;i++){
+            if(colors[i] == lastColor) break;
+            CountOfAE++;
+            if(CountOfAE >= k){
+                result++;
+            }
+            lastColor = colors[i];
+        }
+        return result;
+    }
+};
