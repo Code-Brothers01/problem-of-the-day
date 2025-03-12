@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int lowerBound(vector<int>&nums){
+        int low = 0;int index = nums.size();
+        int high = nums.size() - 1;
+        while(low <= high){
+            int mid = (low + high)/2;
+            if(nums[mid] < 0){
+                low = mid + 1;
+            }else if(nums[mid] >= 0){
+                high = mid - 1;
+                index = mid;
+            }
+        }
+        return index;
+    }
+    int upperBound(vector<int>&nums){
+        int low = 0;int index = nums.size();
+        int high = nums.size() - 1;
+        while(low <= high){
+            int mid = (low + high)/2;
+            if(nums[mid] <= 0){
+                low = mid + 1;
+            }else if(nums[mid] > 0){
+                high = mid - 1;
+                index = mid;
+            }
+        }
+        return index;
+    }
+    int maximumCount(vector<int>& nums) {
+        int pos = nums.size() - upperBound(nums);
+        int neg = lowerBound(nums);
+        return max(pos,neg);
+    }
+};
