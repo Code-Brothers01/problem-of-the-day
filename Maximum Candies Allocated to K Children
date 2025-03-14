@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int maximumCandies(vector<int>& candies, long long k) {
+      int maxCandy = 0;
+      for(int i = 0;i < candies.size();i++){
+        maxCandy = max(maxCandy,candies[i]);
+      }
+      int left = 0,right = maxCandy;
+      while(left < right){
+        int mid = (left + right + 1)/2;
+        if(canCandiesValid(candies,k,mid)){
+            left = mid;
+        }else{
+            right = mid - 1;
+        }
+      }
+      return left;  
+    }
+    bool canCandiesValid(vector<int>& candies, long long k,int mid){
+        long long maxChildren = 0;
+        for(int i = 0;i < candies.size();i++){
+            maxChildren += candies[i]/mid;
+        }
+        return maxChildren >= k;
+    }
+};
