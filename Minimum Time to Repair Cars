@@ -1,0 +1,34 @@
+class Solution {
+public:
+    long long repairCars(vector<int>& ranks, int cars) {
+        // Define the search range for minimum time
+        long long low = 1, high = 1LL * *min_element(ranks.begin(), ranks.end()) * cars * cars;
+        long long ans = high; // Store the minimum possible time
+         
+        // Binary Search on time
+        while (low <= high) {
+            long long mid = low + (high - low) / 2; // Avoid integer overflow
+            
+            // Check if 'mid' time is enough to repair 'cars' cars
+            if (canRepairInTime(ranks, cars, mid)) {
+                ans = mid;  // Update answer
+                high = mid - 1; // Try for a smaller time
+            } else {
+                low = mid + 1; // Increase time limit
+            }
+        }
+        return ans;
+    }
+
+private:
+    // Helper function to check if we can repair 'cars' in 'time' minutes
+    bool canRepairInTime(vector<int>& ranks, int cars, long long time) {
+        long long totalCars = 0;
+        
+        for (int rank : ranks) {
+            totalCars += sqrt(time / rank); // Cars repaired by this mechanic in given time
+            if (totalCars >= cars) return true; // No need to check further
+        }
+        return totalCars >= cars;
+    }
+};
