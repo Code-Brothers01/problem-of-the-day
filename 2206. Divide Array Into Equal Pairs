@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool divideArray(vector<int>& nums) {
+        //sorting approach
+        // sort(nums.begin(),nums.end());
+        // for(int i = 0;i < nums.size();i += 2){
+        //     if(nums[i] != nums[i+1]){
+        //         return false;
+        //     }
+        // }
+        // return true;
+        //map approach
+        // unordered_map<int,int>map;
+        // for(int i : nums){
+        //     map[i]++;
+        // }
+        // for(auto& i : map){
+        //     if(i.second % 2 != 0){
+        //         return false;
+        //     }
+        // }
+        // return true;
+        //set approach
+        unordered_set<int>set;
+        for(int i : nums){
+            if(set.count(i)){
+                set.erase(i);
+            }else{
+                set.insert(i);
+            }
+        }
+        return set.empty();
+    }
+};
