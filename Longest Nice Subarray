@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int longestNiceSubarray(vector<int>& nums) {
+        int left = 0;       // Left pointer of the sliding window
+        int used_bits = 0;  // Bitmask to track used bits in the current window
+        int max_length = 0; // Stores the maximum length of a nice subarray
+
+        for (int right = 0; right < nums.size(); right++) {
+            // If adding nums[right] causes a bitwise conflict, shrink the window from the left
+            while ((used_bits & nums[right]) != 0) {
+                used_bits ^= nums[left]; // Remove nums[left] from the bitmask
+                left++; // Move the left pointer forward
+            }
+
+            // Add nums[right] to the used_bits
+            used_bits |= nums[right];
+
+            // Update the maximum length of the nice subarray found so far
+            max_length = max(max_length, right - left + 1);
+        }
+
+        return max_length;
+    }
+};
