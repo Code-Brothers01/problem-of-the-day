@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int countCompleteComponents(int n, vector<vector<int>>& edges) {
+        vector<vector<int>>graph(n);
+        unordered_map<string,int>componentFrequency;
+        for(int ver = 0;ver < n;ver++){
+            graph[ver].push_back(ver);
+        }
+        for(const auto& edge : edges){
+            graph[edge[0]].push_back(edge[1]);
+            graph[edge[1]].push_back(edge[0]);
+        }
+        for(int ver = 0;ver < n;ver++){
+            vector<int>neighbors = graph[ver];
+            sort(neighbors.begin(),neighbors.end());
+            string key;
+            for(int num : neighbors){
+                key += to_string(num) + ",";
+            }
+            componentFrequency[key]++;
+        }
+        int completeComponent = 0;
+        for(const auto& entry : componentFrequency){
+            int size = count(entry.first.begin(),entry.first.end(),',');
+            if(size == entry.second){
+                completeComponent++;
+            }
+        }
+        return completeComponent;
+    }
+};
