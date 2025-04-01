@@ -1,0 +1,28 @@
+class Solution {
+public:
+    long long mostPoints(vector<vector<int>>& questions) {
+        int n = questions.size();
+        // dp[i] = max points from index i to end
+        vector<long long> dp(n + 1, 0); // Extra slot for base case when i = n
+        
+        // Iterate from right to left
+        for (int i = n - 1; i >= 0; i--) {
+            int points_i = questions[i][0];
+            int brainpower_i = questions[i][1];
+            
+            // Next index if we solve this question
+            int next_idx = min(n, i + brainpower_i + 1);
+            
+            // Option 1: Solve current question
+            long long solve = points_i + dp[next_idx];
+            
+            // Option 2: Skip current question
+            long long skip = dp[i + 1];
+            
+            // Take the maximum of solving or skipping
+            dp[i] = max(solve, skip);
+        }
+        
+        return dp[0]; // Max points starting from question 0
+    }
+};
