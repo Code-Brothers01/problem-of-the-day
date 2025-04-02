@@ -1,0 +1,35 @@
+class Solution {
+public:
+    long long maximumTripletValue(vector<int>& nums) {
+        int n = nums.size();
+        long long max_value = 0;
+
+        // Step 1: Create prefix max array
+        vector<int> maxPrefix(n, 0);
+        maxPrefix[0] = nums[0];
+        for (int i = 1; i < n; i++) {
+            maxPrefix[i] = max(maxPrefix[i - 1], nums[i]); // Store max value from 0 to i
+        }
+
+        // Step 2: Create suffix max array
+        vector<int> maxSuffix(n, 0);
+        maxSuffix[n - 1] = nums[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            maxSuffix[i] = max(maxSuffix[i + 1], nums[i]); // Store max value from i to n-1
+        }
+
+        // Step 3: Iterate over possible middle elements (j) and compute max value
+        for (int j = 1; j < n - 1; j++) {
+            int leftMax = maxPrefix[j - 1];  // Maximum element before index j
+            int rightMax = maxSuffix[j + 1]; // Maximum element after index j
+
+            // Compute the expression (leftMax - nums[j]) * rightMax
+            long long value = (long long)(leftMax - nums[j]) * rightMax;
+
+            // Update max_value if a larger value is found
+            max_value = max(max_value, value);
+        }
+
+        return max_value;
+    }
+};
