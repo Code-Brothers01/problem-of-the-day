@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int sum = 0; // This will store the final sum of XORs of all subsets
+
+    // Recursive function to generate all subsets and compute XOR sum
+    void dfs(vector<int>& nums, int index, int currXOR) {
+        // Base case: If we have considered all elements
+        if (index == nums.size()) {
+            sum += currXOR; // Add current subset's XOR to the total sum
+            return;
+        }
+
+        // Choice 1: Include the current element in the subset
+        dfs(nums, index + 1, currXOR ^ nums[index]);
+
+        // Choice 2: Exclude the current element from the subset
+        dfs(nums, index + 1, currXOR);
+    }
+
+    int subsetXORSum(vector<int>& nums) {
+        // Start recursive DFS from index 0 with initial XOR as 0
+        dfs(nums, 0, 0);
+        return sum;
+    }
+};
